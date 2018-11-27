@@ -1,0 +1,108 @@
+{
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "my council",
+            "intents": [
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                },
+                {
+                    "name": "PostcodeQuery",
+                    "slots": [],
+                    "samples": [
+                        "where do i live",
+                        "tell me my postcode",
+                        "what's my postcode"
+                    ]
+                },
+                {
+                    "name": "RefuseCollectionIntent",
+                    "slots": [
+                        {
+                            "name": "BinColor",
+                            "type": "AMAZON.Color"
+                        },
+                        {
+                            "name": "BinType",
+                            "type": "BinType"
+                        }
+                    ],
+                    "samples": [
+                        "when will the {BinType} be collected next",
+                        "when will the {BinColor} bin be collected next",
+                        "when will the {BinType} next be collected",
+                        "when will the {BinColor} bin next be collected",
+                        "when the {BinType} will be emptied next",
+                        "when the {BinColor} bin will be emptied next",
+                        "when the {BinType} will next be emptied",
+                        "when the {BinColor} bin will next be emptied",
+                        "when the {BinType} will be emptied",
+                        "when's the next {BinType} collection",
+                        "when the next {BinType} collection will be",
+                        "when will my {BinType} be collected",
+                        "when to put out the {BinColor} bin",
+                        "when the next {BinColor} bin collection will be",
+                        "when's the next {BinColor} bin collection",
+                        "when will the {BinColor} bin be emptied",
+                        "when will my {BinColor} bin be collected"
+                    ]
+                }
+            ],
+            "types": [
+                {
+                    "name": "BinType",
+                    "values": [
+                        {
+                            "name": {
+                                "value": "DOMESTIC",
+                                "synonyms": [
+                                    "domestic waste",
+                                    "landfill",
+                                    "garbage",
+                                    "trash",
+                                    "rubbish"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "ORGANIC",
+                                "synonyms": [
+                                    "biodegradable waste",
+                                    "compostable waste ",
+                                    "garden waste",
+                                    "organic waste"
+                                ]
+                            }
+                        },
+                        {
+                            "name": {
+                                "value": "RECYCLE",
+                                "synonyms": [
+                                    "recycling"
+                                ]
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
