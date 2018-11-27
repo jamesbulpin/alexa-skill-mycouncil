@@ -1,0 +1,25 @@
+{
+  "name": "alexa-skill-mycouncil",
+  "version": "0.0.1",
+  "description": "Lambda function to implement the My Council Alexa skill.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "alexa",
+    "skill"
+  ],
+  "author": "James Bulpin",
+  "license": "TBD",
+  "dependencies": {
+    "ask-sdk-core": "^2.0.0",
+    "ask-sdk-model": "^1.0.0",
+    "request": "^2.88.0",
+    "query-string": "^6.2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
