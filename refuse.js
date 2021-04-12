@@ -188,6 +188,22 @@ function parseAlexaAddress(address) {
     };
 }
 
+function dateSuffix(d) {
+    switch (d) {
+    case 1:
+    case 21:
+    case 31:
+        return "st";
+    case 2:
+    case 22:
+        return "nd";
+    case 3:
+    case 23:
+        return "rd";
+    }
+    return "th";
+}
+
 function alexaSkillFulfillment(request, address, callback) {
     var collectionType = null;
     if (request.intent.slots && request.intent.slots.BinColor && request.intent.slots.BinColor.value) {
@@ -258,12 +274,7 @@ function alexaSkillFulfillment(request, address, callback) {
                             else {
                                 thistxt += "on ";
                             }
-                            thistxt += dates[ct].date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'});
-                            var d = dates[ct].date.getDate();
-                            if ((d == 1)||(d == 21)||(d == 31)) { thistxt = thistxt.replace(/\d+/, e => e + "st"); }
-                            else if ((d == 2)||(d == 22)) { thistxt = thistxt.replace(/\d+/, e => e + "nd"); }
-                            else if ((d == 3)||(d == 23)) { thistxt = thistxt.replace(/\d+/, e => e + "rd"); }
-                            else { thistxt = thistxt.replace(/\d+/, e => e + "th"); }
+                            thistxt += dates[ct].date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'}).replace(/\b\d{1,2}\b/, e => e + dateSuffix(e.toString()));
                         }
                         thistxt += ". ";
                         txt += thistxt;
