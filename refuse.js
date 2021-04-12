@@ -1,6 +1,8 @@
 const request = require("request");
 const queryString  = require('query-string');
 
+const BASE_URL = "https://servicelayer3c.azure-api.net/wastecalendar/";
+
 function getDateToday() {
     var today = new Date();
     today.setHours(0);
@@ -12,7 +14,7 @@ function getDateToday() {
 
 function getAddressesForPostcode(postcode, callback) {
     request.get({
-        url: 'https://refusecalendarapi.azurewebsites.net/address/search/?' + queryString.stringify({'postcode':postcode})        
+        url: BASE_URL + 'address/search/?' + queryString.stringify({'postcode':postcode})
     }, function(error, response, body) {
         if (error) {
             callback(error, null);
@@ -80,7 +82,7 @@ function lookupAddress(housenumber, street, postcode, callback) {
 
 function getSchedule(id, callback) {
     request.get({
-        url: 'https://refusecalendarapi.azurewebsites.net/collection/search/' + id + '/?' + queryString.stringify({'numberOfCollections':10})        
+        url: BASE_URL + 'collection/search/' + id + '/?' + queryString.stringify({'numberOfCollections':10})
     }, function(error, response, body) {
         if (error) {
             callback(error, null);
