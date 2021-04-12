@@ -237,6 +237,7 @@ function alexaSkillFulfillment(request, address, callback) {
         }
         getSchedule(id, function (err, schedule) {
             if (err) {
+                console.log("getSchedule(" + id + ") error: " + err);
                 callback("Sorry, I was unable to retrieve the collection calendar for your address. Please check the council website for collection date.");
                 return;
             }
