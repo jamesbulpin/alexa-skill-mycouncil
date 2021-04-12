@@ -205,6 +205,21 @@ function dateSuffix(d) {
     return "th";
 }
 
+function joinTextList(items) {
+    if (items.length == 0) {
+        return "";
+    }
+    if (items.length == 1) {
+        return items[0];
+    }
+    var x = [];
+    for (var item of items) {
+        x.push(item);
+    }
+    var finalItem = x.splice(x.length - 1)[0];
+    return x.join(", ") + " and " + finalItem;
+}
+
 function alexaSkillFulfillment(request, address, callback) {
     var collectionType = null;
     if (request.intent.slots && request.intent.slots.BinColor && request.intent.slots.BinColor.value) {
@@ -256,33 +271,61 @@ function alexaSkillFulfillment(request, address, callback) {
                     callback("Sorry, I was unable to find the next date for the requested collection type. Please check the council website for collection date.");
                     return;
                 }
+
+                // Group responses for the same dates
+                var gDates = {};
+                var gNotFound = [];
+                for (var ct in dates) {
+                    if (dates[ct].date) {
+                        if (!gDates[dates[ct].date]) {
+                            gDates[dates[ct].date] = [];
+                        }
+                        gDates[dates[ct].date].push(dates[ct].askedFor);
+                    }
+                    else {
+                        gNotFound.push(dates[ct].askedFor);
+                    }
+                }
+
+                // Create a textual response
                 var today = getDateToday();
                 var tomorrow = getDateToday();
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 var txt = "";
-                for (var ct in dates) {
-                    if (dates[ct].date) {
-                        var thistxt = "The next " + dates[ct].askedFor + " collection is ";
-                        if ((dates[ct].date - today) == 0) {
-                            thistxt += "today";
-                        }
-                        else if ((dates[ct].date - tomorrow) == 0) {
-                            thistxt += "tomorrow";
-                        }
-                        else {
-                            if ((dates[ct].date - today) < (7*24*60*60*1000)) {
-                                thistxt += "this coming ";
-                            }
-                            else {
-                                thistxt += "on ";
-                            }
-                            thistxt += dates[ct].date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'}).replace(/\b\d{1,2}\b/, e => e + dateSuffix(e.toString()));
-                        }
-                        thistxt += ". ";
-                        txt += thistxt;
+                for (var dateKey in gDates) {
+                    var date = new Date(dateKey);
+                    var thistxt = "The next " + joinTextList(gDates[dateKey]);
+                    if (gDates[dateKey].length == 1) {
+                        thistxt += " collection is ";
                     }
                     else {
-                        txt += "Sorry, I could not find the date for the next " + dates[ct].askedFor + " collection. ";
+                        thistxt += " collections are ";
+                    }
+                    if ((date - today) == 0) {
+                        thistxt += "today";
+                    }
+                    else if ((date - tomorrow) == 0) {
+                        thistxt += "tomorrow";
+                    }
+                    else {
+                        if ((date - today) < (7*24*60*60*1000)) {
+                            thistxt += "this coming ";
+                        }
+                        else {
+                            thistxt += "on ";
+                        }
+                        thistxt += date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'}).replace(/\b\d{1,2}\b/, e => e + dateSuffix(e.toString()));
+                    }
+                    thistxt += ". ";
+                    txt += thistxt;
+                }
+                if (gNotFound.length > 0) {
+                    txt += "Sorry, I could not find the date for the next " + joinTextList(gNotFound);
+                    if (gNotFound.length == 1) {
+                        txt += " collection.";
+                    }
+                    else {
+                        txt += " collections.";
                     }
                 }
                 callback(txt);
