@@ -301,8 +301,8 @@ function _test3() {
         }
     };
     var address = {
-        addressLine1: "",
-        postalCode: ""
+        addressLine1: process.env.TEST_HOUSE_NUMBER + " " + process.env.TEST_STREET,
+        postalCode: process.env.TEST_POSTCODE
     }
     alexaSkillFulfillment(request, address, function(say) {
         console.log("Saying: " + say);
@@ -325,9 +325,9 @@ function _test2() {
 }
 
 function _test() {
-    var postcode = "";
-    var housenumber = ""
-    var street = "";
+    var postcode = process.env.TEST_POSTCODE;
+    var housenumber = process.env.TEST_HOUSE_NUMBER;
+    var street = process.env.TEST_STREET;
 
     console.log("Looking up " + housenumber + " " + street + ", " + postcode + "...");
     lookupAddress(housenumber, street, postcode, function(err, id) {
@@ -351,5 +351,8 @@ function _test() {
 }
 
 module.exports = {
-    alexaSkillFulfillment: alexaSkillFulfillment
+    alexaSkillFulfillment: alexaSkillFulfillment,
+    _test: _test,
+    _test2: _test2,
+    _test3: _test3
 };
