@@ -91,8 +91,9 @@ function getSchedule(id, callback) {
         try {
             callback(null, JSON.parse(body));
         }
-        catch (error) {
-            callback(error, null);
+        catch (e) {
+            console.log("API returned: " + body);
+            callback(e, null);
         }
     });
 }
