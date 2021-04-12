@@ -243,28 +243,34 @@ function alexaSkillFulfillment(request, address, callback) {
                 tomorrow.setDate(tomorrow.getDate() + 1);
                 var txt = "";
                 for (var ct in dates) {
-                    txt += "The next " + dates[ct].askedFor + " collection is ";
-                    if ((dates[ct].date - today) == 0) {
-                        txt += "today";
-                    }
-                    else if ((dates[ct].date - tomorrow) == 0) {
-                        txt += "tomorrow";
-                    }
-                    else {
-                        if ((dates[ct].date - today) < (7*24*60*60*1000)) {
-                            txt += "this coming ";
+                    if (dates[ct].date) {
+                        var thistxt = "The next " + dates[ct].askedFor + " collection is ";
+                        if ((dates[ct].date - today) == 0) {
+                            thistxt += "today";
+                        }
+                        else if ((dates[ct].date - tomorrow) == 0) {
+                            thistxt += "tomorrow";
                         }
                         else {
-                            txt += "on ";
+                            if ((dates[ct].date - today) < (7*24*60*60*1000)) {
+                                thistxt += "this coming ";
+                            }
+                            else {
+                                thistxt += "on ";
+                            }
+                            thistxt += dates[ct].date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'});
+                            var d = dates[ct].date.getDate();
+                            if ((d == 1)||(d == 21)||(d == 31)) { thistxt = thistxt.replace(/\d+/, e => e + "st"); }
+                            else if ((d == 2)||(d == 22)) { thistxt = thistxt.replace(/\d+/, e => e + "nd"); }
+                            else if ((d == 3)||(d == 23)) { thistxt = thistxt.replace(/\d+/, e => e + "rd"); }
+                            else { thistxt = thistxt.replace(/\d+/, e => e + "th"); }
                         }
-                        txt += dates[ct].date.toLocaleString("en-GB", {weekday: 'short', month: 'long', day: 'numeric'});
-                        var d = dates[ct].date.getDate();
-                        if ((d == 1)||(d == 21)||(d == 31)) { txt += "st"; }
-                        else if ((d == 2)||(d == 22)) { txt += "nd"; }
-                        else if ((d == 3)||(d == 23)) { txt += "rd"; }
-                        else { txt += "th"; }
+                        thistxt += ". ";
+                        txt += thistxt;
                     }
-                    txt += ". ";
+                    else {
+                        txt += "Sorry, I could not find the date for the next " + dates[ct].askedFor + " collection. ";
+                    }
                 }
                 callback(txt);
             });
